@@ -75,19 +75,20 @@ Player::Player(const std::string &idleTexturePath,
     sprite.setPosition(position);
 
     // Definisikan hitbox kustom kita.
-    float collisionWidth = 20.f;
-    float collisionHeight = 45.f;
+    float collisionWidth = 32.f;
+    float collisionHeight = 58.f;
 
     // Ini adalah 'local' bounds, relatif terhadap origin (tengah sprite)
-    // m_collisionBox = {
-    //     {-(collisionWidth / 2.f), -(collisionHeight / 2.f)}, // Posisi {left, top}
-    //     {collisionWidth, collisionHeight}                    // Ukuran {width, height}
-    // };
+    m_collisionBox = {
+        {-(collisionWidth / 2.f), -(collisionHeight / 2.f)}, // Posisi {left, top}
+        {collisionWidth, collisionHeight}                    // Ukuran {width, height}
+    };
 
     // Jika ingin hitbox-nya di BAWAH (untuk platformer):
-    m_collisionBox = {
-        {-(collisionWidth / 2.f), (currentFrameHeight / 2.f) - collisionHeight},
-        {collisionWidth, collisionHeight}};
+    // m_collisionBox = {
+    //    {-(collisionWidth / 2.f), (currentFrameHeight / 2.f) - collisionHeight},
+    //    {collisionWidth, collisionHeight}
+    // };
 }
 
 void Player::handleInput()
@@ -209,6 +210,7 @@ void Player::updateAnimation(float deltaTime)
     animationTimer += deltaTime;
     AnimationConfig *currentAnim = nullptr;
     float currentAnimSpeed = 0.f;
+    bool loopAnimation = true;
 
     if (currentState == AnimationState::Idle)
     {
@@ -229,6 +231,7 @@ void Player::updateAnimation(float deltaTime)
     {
         currentAnim = &attackAnim;
         currentAnimSpeed = attackAnimSpeed;
+        loopAnimation = false; // Attack tidak loop
     }
 
     if (currentAnim && animationTimer >= currentAnimSpeed)
@@ -386,20 +389,6 @@ sf::FloatRect Player::getCollisionHitbox() const
     globalBox.position.y += position.y;
 
     return globalBox;
-}
-
-void Player::drawAttackHitbox(sf::RenderWindow &window)
-{
-    if (attackHitboxActive)
-    {
-        sf::RectangleShape debugBox;
-        debugBox.setSize({attackHitbox.size.x, attackHitbox.size.y});
-        debugBox.setPosition({attackHitbox.position.x, attackHitbox.position.y});
-        debugBox.setFillColor(sf::Color(255, 0, 0, 100)); // Semi-transparent red
-        debugBox.setOutlineColor(sf::Color::Red);
-        debugBox.setOutlineThickness(2.f);
-        window.draw(debugBox);
-    }
 }
 
 sf::FloatRect Player::getAttackHitbox() const
