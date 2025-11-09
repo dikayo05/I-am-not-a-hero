@@ -81,12 +81,32 @@ int main()
         sf::Vector2f currentCameraPos = camera.getCenter();
         sf::Vector2f newCameraPos = currentCameraPos + (targetCameraPos - currentCameraPos) * cameraSmoothing;
         camera.setCenter(newCameraPos);
+
+        // Batasi camera agar tidak keluar dari batas map (opsional)
+        // float halfWidth = camera.getSize().x / 2.f;
+        // float halfHeight = camera.getSize().y / 2.f;
+
+        // Set batas map Anda (sesuaikan dengan ukuran level)
+        // float minX = halfWidth;
+        // float maxX = 2000.f - halfWidth; // Misal lebar map 2000
+        // float minY = halfHeight;
+        // float maxY = 1000.f - halfHeight; // Misal tinggi map 1000
+
+        // sf::Vector2f boundedPos = camera.getCenter();
+        // boundedPos.x = std::max(minX, std::min(boundedPos.x, maxX));
+        // boundedPos.y = std::max(minY, std::min(boundedPos.y, maxY));
+
+        // camera.setCenter(boundedPos);
+
         window.setView(camera);
 
         // RENDER
         window.clear(sf::Color(135, 206, 235));
         ground.draw(window);
         player.draw(window);
+
+        // Reset view ke default untuk UI/HUD (jika ada)
+        // window.setView(window.getDefaultView());
 
         window.display();
     }
