@@ -18,25 +18,16 @@ int main()
     sf::RenderWindow window(sf::VideoMode({800, 600}), "I am not a hero");
     window.setFramerateLimit(60);
 
-    // Buat ground dengan tileset
+    // PLATFORMS
     Ground ground(GROUND_TILESET_TEXTURE, 32, 32);
+    // x, y, panjang, tileX, tileY
+    ground.createPlatform(0, 500, 25, 1, 0);  // Platform bawah (ground utama)
+    ground.createPlatform(200, 400, 8, 1, 0); // Platform tengah
+    ground.createPlatform(50, 300, 5, 1, 0);  // Platform kiri atas
+    ground.createPlatform(500, 250, 6, 1, 0); // Platform kanan atas
 
-    // Buat beberapa platform
-    // Platform bawah (ground utama)
-    ground.createPlatform(0, 500, 25, 1, 0); // x, y, panjang, tileX, tileY
-
-    // Platform tengah
-    ground.createPlatform(200, 400, 8, 1, 0);
-
-    // Platform kiri atas
-    ground.createPlatform(50, 300, 5, 1, 0);
-
-    // Platform kanan atas
-    ground.createPlatform(500, 250, 6, 1, 0);
-
-    // Buat player
+    // PLAYER
     Player player(PLAYER_IDLE_TEXTURE, PLAYER_RUN_TEXTURE, PLAYER_JUMP_TEXTURE, 100.f, 100.f);
-
     // Opsional: Sesuaikan physics
     // player.setJumpForce(500.f);
     // player.setGravity(1200.f);
@@ -62,12 +53,6 @@ int main()
                 {
                     window.close();
                 }
-
-                // Reset player position (R key)
-                if (keyPressed->code == sf::Keyboard::Key::R)
-                {
-                    player = Player(PLAYER_IDLE_TEXTURE, PLAYER_RUN_TEXTURE, PLAYER_JUMP_TEXTURE, 100.f, 100.f);
-                }
             }
         }
 
@@ -76,7 +61,7 @@ int main()
         player.update(deltaTime, ground.getCollisionBoxes());
 
         // Render
-        window.clear(sf::Color(135, 206, 235)); // Sky blue
+        window.clear(sf::Color(135, 206, 235));
         ground.draw(window);
         player.draw(window);
         window.display();
