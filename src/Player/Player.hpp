@@ -80,6 +80,7 @@ public:
     sf::Vector2f getPosition() const;
     sf::FloatRect getCollisionHitbox() const;
     sf::FloatRect getAttackHitbox() const;
+    void drawAttackHitbox(sf::RenderWindow &window);
     bool isAttackHitboxActive() const;
     void setAttackAnimation(int columns, int rows, int frameCount);
     void setAttackSpeed(float speed);
