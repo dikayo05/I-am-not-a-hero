@@ -3,6 +3,7 @@
 Player::Player(const std::string &idleTexturePath,
                const std::string &walkTexturePath,
                const std::string &jumpTexturePath,
+               const std::string &attackTexturePath,
                float positionX = 100.f,
                float positionY = 100.f)
     : sprite(idleTexture),
@@ -19,7 +20,12 @@ Player::Player(const std::string &idleTexturePath,
       currentFrameIndex(0),
       animationTimer(0.f),
       idleAnimSpeed(0.1f),
-      walkAnimSpeed(0.1f)
+      walkAnimSpeed(0.1f),
+      attackAnimSpeed(0.08f),
+      isAttacking(false),
+      attackCooldown(0.5f),
+      attackCooldownTimer(0.f),
+      attackHitboxActive(false)
 {
     // Load textures
     if (!idleTexture.loadFromFile(idleTexturePath))
@@ -37,6 +43,11 @@ Player::Player(const std::string &idleTexturePath,
         std::cerr << "Error loading jump texture!" << std::endl;
     }
 
+    if (!attackTexture.loadFromFile(attackTexturePath))
+    {
+        std::cerr << "Error loading attack texture!" << std::endl;
+    }
+
     // Konfigurasi animasi
     idleAnim.columns = 2;
     idleAnim.rows = 4;
@@ -49,6 +60,10 @@ Player::Player(const std::string &idleTexturePath,
     jumpAnim.columns = 2;
     jumpAnim.rows = 4;
     jumpAnim.frameCount = 8;
+
+    attackAnim.columns = 8;
+    attackAnim.rows = 5;
+    attackAnim.frameCount = 9;
 
     // Setup frame awal
     currentFrameWidth = static_cast<int>(idleTexture.getSize().x) / idleAnim.columns;
@@ -115,9 +130,20 @@ void Player::handleInput()
         isOnGround = false;
     }
 
+    // Attack
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::J) ||
+        sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LControl))
+    {
+        attack();
+    }
+
     // Update state
     previousState = currentState;
-    if (!isOnGround)
+    if (isAttacking)
+    {
+        currentState = AnimationState::Attacking;
+    }
+    else if (!isOnGround)
     {
         currentState = AnimationState::Jumping;
     }
@@ -128,6 +154,20 @@ void Player::handleInput()
     else
     {
         currentState = AnimationState::Idle;
+    }
+}
+
+void Player::attack()
+{
+    if (!isAttacking && attackCooldownTimer <= 0.f)
+    {
+        isAttacking = true;
+        attackCooldownTimer = attackCooldown;
+        currentFrameIndex = 0;
+        animationTimer = 0.f;
+
+        // Aktifkan hitbox di frame tertentu (misal frame 3-5)
+        attackHitboxActive = false;
     }
 }
 
@@ -157,15 +197,20 @@ void Player::updateAnimation(float deltaTime)
             currentFrameWidth = static_cast<int>(jumpTexture.getSize().x) / jumpAnim.columns;
             currentFrameHeight = static_cast<int>(jumpTexture.getSize().y) / jumpAnim.rows;
         }
+        else if (currentState == AnimationState::Attacking)
+        {
+            sprite.setTexture(attackTexture);
+            currentFrameWidth = static_cast<int>(attackTexture.getSize().x) / attackAnim.columns;
+            currentFrameHeight = static_cast<int>(attackTexture.getSize().y) / attackAnim.rows;
+        }
 
         sprite.setOrigin({currentFrameWidth / 2.f, currentFrameHeight / 2.f});
     }
 
-    // REPLACE bagian "Skip animasi jika sedang jumping" dan seterusnya dengan:
     animationTimer += deltaTime;
-
     AnimationConfig *currentAnim = nullptr;
     float currentAnimSpeed = 0.f;
+    bool loopAnimation = true;
 
     if (currentState == AnimationState::Idle)
     {
@@ -180,13 +225,47 @@ void Player::updateAnimation(float deltaTime)
     else if (currentState == AnimationState::Jumping)
     {
         currentAnim = &jumpAnim;
-        currentAnimSpeed = walkAnimSpeed; // Atau buat jumpAnimSpeed sendiri
+        currentAnimSpeed = walkAnimSpeed;
+    }
+    else if (currentState == AnimationState::Attacking)
+    {
+        currentAnim = &attackAnim;
+        currentAnimSpeed = attackAnimSpeed;
+        loopAnimation = false; // Attack tidak loop
     }
 
     if (currentAnim && animationTimer >= currentAnimSpeed)
     {
         animationTimer = 0.f;
-        currentFrameIndex = (currentFrameIndex + 1) % currentAnim->frameCount;
+
+        // Handle attack animation
+        if (currentState == AnimationState::Attacking)
+        {
+            currentFrameIndex++;
+
+            // Aktifkan hitbox di frame 3-5
+            if (currentFrameIndex >= 3 && currentFrameIndex <= 5)
+            {
+                attackHitboxActive = true;
+                updateAttackHitbox();
+            }
+            else
+            {
+                attackHitboxActive = false;
+            }
+
+            // Selesai attack animation
+            if (currentFrameIndex >= currentAnim->frameCount)
+            {
+                currentFrameIndex = 0;
+                isAttacking = false;
+                attackHitboxActive = false;
+            }
+        }
+        else
+        {
+            currentFrameIndex = (currentFrameIndex + 1) % currentAnim->frameCount;
+        }
 
         int col = currentFrameIndex % currentAnim->columns;
         int row = currentFrameIndex / currentAnim->columns;
@@ -275,6 +354,12 @@ void Player::applyPhysics(float deltaTime, const std::vector<sf::FloatRect> &gro
 
 void Player::update(float deltaTime, const std::vector<sf::FloatRect> &groundBoxes)
 {
+    // Update cooldown timer
+    if (attackCooldownTimer > 0.f)
+    {
+        attackCooldownTimer -= deltaTime;
+    }
+
     applyPhysics(deltaTime, groundBoxes);
     updateAnimation(deltaTime);
 }
@@ -304,6 +389,42 @@ sf::FloatRect Player::getCollisionHitbox() const
     globalBox.position.y += position.y;
 
     return globalBox;
+}
+
+sf::FloatRect Player::getAttackHitbox() const
+{
+    return attackHitbox;
+}
+
+bool Player::isAttackHitboxActive() const
+{
+    return attackHitboxActive;
+}
+
+void Player::setAttackAnimation(int columns, int rows, int frameCount)
+{
+    attackAnim = {frameCount, columns, rows};
+}
+
+void Player::setAttackSpeed(float speed)
+{
+    attackAnimSpeed = speed;
+}
+
+void Player::setAttackCooldown(float cooldown)
+{
+    attackCooldown = cooldown;
+}
+
+void Player::updateAttackHitbox()
+{
+    float hitboxWidth = 60.f;
+    float hitboxHeight = 40.f;
+    float offsetX = m_isFacingRight ? 40.f : -40.f;
+
+    attackHitbox = sf::FloatRect(
+        {position.x + offsetX - hitboxWidth / 2.f, position.y - hitboxHeight / 2.f},
+        {hitboxWidth, hitboxHeight});
 }
 
 void Player::setIdleAnimation(int columns, int rows, int frameCount)

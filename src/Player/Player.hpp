@@ -9,7 +9,8 @@ enum class AnimationState
 {
     Idle,
     Walking,
-    Jumping
+    Jumping,
+    Attacking
 };
 
 class Player
@@ -18,10 +19,12 @@ private:
     sf::Texture idleTexture;
     sf::Texture walkTexture;
     sf::Texture jumpTexture;
+    sf::Texture attackTexture;
     sf::Sprite sprite;
     sf::Vector2f position;
     sf::Vector2f velocity;
     sf::FloatRect m_collisionBox;
+
     float speed;
     float jumpForce;
     float gravity;
@@ -37,6 +40,13 @@ private:
     float animationTimer;
     float idleAnimSpeed;
     float walkAnimSpeed;
+    float attackAnimSpeed;
+    bool isAttacking;
+    float attackCooldown;
+    float attackCooldownTimer;
+
+    sf::FloatRect attackHitbox;
+    bool attackHitboxActive;
 
     struct AnimationConfig
     {
@@ -48,6 +58,7 @@ private:
     AnimationConfig idleAnim;
     AnimationConfig walkAnim;
     AnimationConfig jumpAnim;
+    AnimationConfig attackAnim;
 
     int currentFrameWidth;
     int currentFrameHeight;
@@ -56,9 +67,11 @@ public:
     Player(const std::string &idleTexturePath,
            const std::string &walkTexturePath,
            const std::string &jumpTexturePath,
+           const std::string &attackTexturePath,
            float positionX,
            float positionY);
     void handleInput();
+    void attack();
     void updateAnimation(float deltaTime);
     void applyPhysics(float deltaTime, const std::vector<sf::FloatRect> &groundBoxes);
     void update(float deltaTime, const std::vector<sf::FloatRect> &groundBoxes);
@@ -66,6 +79,12 @@ public:
     bool isFacingRight();
     sf::Vector2f getPosition() const;
     sf::FloatRect getCollisionHitbox() const;
+    sf::FloatRect getAttackHitbox() const;
+    bool isAttackHitboxActive() const;
+    void setAttackAnimation(int columns, int rows, int frameCount);
+    void setAttackSpeed(float speed);
+    void setAttackCooldown(float cooldown);
+    void updateAttackHitbox();
     void setIdleAnimation(int columns, int rows, int frameCount);
     void setWalkAnimation(int columns, int rows, int frameCount);
     void setJumpAnimation(int columns, int rows, int frameCount);

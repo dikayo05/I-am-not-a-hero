@@ -9,6 +9,7 @@
 #define PLAYER_IDLE_TEXTURE ASSET_PATH "images/character/player/knight/Idle.png"
 #define PLAYER_RUN_TEXTURE ASSET_PATH "images/character/player/knight/Run.png"
 #define PLAYER_JUMP_TEXTURE ASSET_PATH "images/character/player/knight/Jump.png"
+#define PLAYER_ATTACK_TEXTURE ASSET_PATH "images/character/player/knight/Attacks.png"
 
 // GROUND TILESET TEXTURE
 #define GROUND_TILESET_TEXTURE ASSET_PATH "images/tilesets/tx_tileset_ground.png"
@@ -27,7 +28,7 @@ int main()
     ground.createPlatform(500, 250, 6, 1, 0); // Platform kanan atas
 
     // PLAYER
-    Player player(PLAYER_IDLE_TEXTURE, PLAYER_RUN_TEXTURE, PLAYER_JUMP_TEXTURE, 100.f, 100.f);
+    Player player(PLAYER_IDLE_TEXTURE, PLAYER_RUN_TEXTURE, PLAYER_JUMP_TEXTURE, PLAYER_ATTACK_TEXTURE, 100.f, 100.f);
 
     // CAMERA
     sf::View camera(sf::FloatRect({0.f, 0.f}, {800.f, 600.f}));
