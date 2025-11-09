@@ -34,7 +34,7 @@ int main()
 
     // CAMERA
     sf::View camera(sf::FloatRect({0.f, 0.f}, {800.f, 600.f}));
-    float cameraSmoothing = 0.1f; // Semakin kecil = semakin smooth (0.05-0.2)
+    float cameraSmoothing = 0.1f; // Semakin kecil = semakin smooth (0.05f - 1.0f)
 
     sf::Clock clock;
 
@@ -64,13 +64,22 @@ int main()
         player.handleInput();
         player.update(deltaTime, ground.getCollisionBoxes());
 
-        // Smooth camera follow player
+        // CAMERA FOLLOW PLAYER
         sf::Vector2f targetCameraPos = player.getPosition();
+
+        // Camera look-ahead berdasarkan arah player
+        float lookAheadDistance = 25.f; // Jarak look-ahead
+        if (!player.isFacingRight())
+        {
+            targetCameraPos.x -= lookAheadDistance;
+        }
+        else
+        {
+            targetCameraPos.x += lookAheadDistance;
+        }
+
         sf::Vector2f currentCameraPos = camera.getCenter();
-
-        // Lerp (linear interpolation) untuk smooth movement
         sf::Vector2f newCameraPos = currentCameraPos + (targetCameraPos - currentCameraPos) * cameraSmoothing;
-
         camera.setCenter(newCameraPos);
         window.setView(camera);
 
@@ -78,6 +87,7 @@ int main()
         window.clear(sf::Color(135, 206, 235));
         ground.draw(window);
         player.draw(window);
+
         window.display();
     }
 
