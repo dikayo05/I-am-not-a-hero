@@ -2,8 +2,8 @@
 
 int main()
 {
-    auto window = sf::RenderWindow(sf::VideoMode({1920u, 1080u}), "CMake SFML Project");
-    window.setFramerateLimit(144);
+    auto window = sf::RenderWindow(sf::VideoMode({1920u, 1080u}), "I am not a hero");
+    window.setFramerateLimit(30);
 
     while (window.isOpen())
     {
