@@ -214,7 +214,6 @@ void Player::applyPhysics(float deltaTime, const std::vector<sf::FloatRect> &gro
     sf::FloatRect playerBounds = getCollisionHitbox();
     for (const auto &groundBox : groundBoxes)
     {
-        // Kode 'if' Anda sudah benar!
         if (playerBounds.findIntersection(groundBox))
         {
             position.x = oldPosition.x;
