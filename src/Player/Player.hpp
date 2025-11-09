@@ -16,6 +16,7 @@ class Player
 private:
     sf::Texture idleTexture;
     sf::Texture walkTexture;
+    sf::Texture jumpTexture;
     sf::Sprite sprite;
     sf::Vector2f position;
     sf::Vector2f velocity;
@@ -44,6 +45,7 @@ private:
 
     AnimationConfig idleAnim;
     AnimationConfig walkAnim;
+    AnimationConfig jumpAnim;
 
     int currentFrameWidth;
     int currentFrameHeight;
@@ -51,6 +53,7 @@ private:
 public:
     Player(const std::string &idleTexturePath,
            const std::string &walkTexturePath,
+           const std::string &jumpTexturePath,
            float positionX,
            float positionY);
     void handleInput();
@@ -62,6 +65,7 @@ public:
     sf::FloatRect getGlobalBounds() const;
     void setIdleAnimation(int columns, int rows, int frameCount);
     void setWalkAnimation(int columns, int rows, int frameCount);
+    void setJumpAnimation(int columns, int rows, int frameCount);
     void setJumpForce(float force);
     void setGravity(float grav);
 };

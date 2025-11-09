@@ -2,6 +2,7 @@
 
 Player::Player(const std::string &idleTexturePath,
                const std::string &walkTexturePath,
+               const std::string &jumpTexturePath,
                float positionX = 100.f,
                float positionY = 100.f)
     : sprite(idleTexture),
@@ -31,6 +32,11 @@ Player::Player(const std::string &idleTexturePath,
         std::cerr << "Error loading walk texture!" << std::endl;
     }
 
+    if (!jumpTexture.loadFromFile(jumpTexturePath))
+    {
+        std::cerr << "Error loading jump texture!" << std::endl;
+    }
+
     // Konfigurasi animasi
     idleAnim.columns = 2;
     idleAnim.rows = 4;
@@ -39,6 +45,10 @@ Player::Player(const std::string &idleTexturePath,
     walkAnim.columns = 2;
     walkAnim.rows = 4;
     walkAnim.frameCount = 8;
+
+    jumpAnim.columns = 2;
+    jumpAnim.rows = 4;
+    jumpAnim.frameCount = 8;
 
     // Setup frame awal
     currentFrameWidth = static_cast<int>(idleTexture.getSize().x) / idleAnim.columns;
@@ -119,22 +129,23 @@ void Player::updateAnimation(float deltaTime)
             currentFrameWidth = static_cast<int>(idleTexture.getSize().x) / idleAnim.columns;
             currentFrameHeight = static_cast<int>(idleTexture.getSize().y) / idleAnim.rows;
         }
-        else if (currentState == AnimationState::Walking || currentState == AnimationState::Jumping)
+        else if (currentState == AnimationState::Walking)
         {
             sprite.setTexture(walkTexture);
             currentFrameWidth = static_cast<int>(walkTexture.getSize().x) / walkAnim.columns;
             currentFrameHeight = static_cast<int>(walkTexture.getSize().y) / walkAnim.rows;
         }
+        else if (currentState == AnimationState::Jumping)
+        {
+            sprite.setTexture(jumpTexture);
+            currentFrameWidth = static_cast<int>(jumpTexture.getSize().x) / jumpAnim.columns;
+            currentFrameHeight = static_cast<int>(jumpTexture.getSize().y) / jumpAnim.rows;
+        }
 
         sprite.setOrigin({currentFrameWidth / 2.f, currentFrameHeight / 2.f});
     }
 
-    // Skip animasi jika sedang jumping
-    if (currentState == AnimationState::Jumping)
-    {
-        return;
-    }
-
+    // REPLACE bagian "Skip animasi jika sedang jumping" dan seterusnya dengan:
     animationTimer += deltaTime;
 
     AnimationConfig *currentAnim = nullptr;
@@ -149,6 +160,11 @@ void Player::updateAnimation(float deltaTime)
     {
         currentAnim = &walkAnim;
         currentAnimSpeed = walkAnimSpeed;
+    }
+    else if (currentState == AnimationState::Jumping)
+    {
+        currentAnim = &jumpAnim;
+        currentAnimSpeed = walkAnimSpeed; // Atau buat jumpAnimSpeed sendiri
     }
 
     if (currentAnim && animationTimer >= currentAnimSpeed)
@@ -264,6 +280,11 @@ void Player::setIdleAnimation(int columns, int rows, int frameCount)
 void Player::setWalkAnimation(int columns, int rows, int frameCount)
 {
     walkAnim = {frameCount, columns, rows};
+}
+
+void Player::setJumpAnimation(int columns, int rows, int frameCount)
+{
+    jumpAnim = {frameCount, columns, rows};
 }
 
 void Player::setJumpForce(float force)
