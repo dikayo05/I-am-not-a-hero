@@ -32,6 +32,10 @@ int main()
     // player.setJumpForce(500.f);
     // player.setGravity(1200.f);
 
+    // CAMERA
+    sf::View camera(sf::FloatRect({0.f, 0.f}, {800.f, 600.f}));
+    float cameraSmoothing = 0.1f; // Semakin kecil = semakin smooth (0.05-0.2)
+
     sf::Clock clock;
 
     // Game loop
@@ -56,11 +60,21 @@ int main()
             }
         }
 
-        // Update
+        // UPDATE
         player.handleInput();
         player.update(deltaTime, ground.getCollisionBoxes());
 
-        // Render
+        // Smooth camera follow player
+        sf::Vector2f targetCameraPos = player.getPosition();
+        sf::Vector2f currentCameraPos = camera.getCenter();
+
+        // Lerp (linear interpolation) untuk smooth movement
+        sf::Vector2f newCameraPos = currentCameraPos + (targetCameraPos - currentCameraPos) * cameraSmoothing;
+
+        camera.setCenter(newCameraPos);
+        window.setView(camera);
+
+        // RENDER
         window.clear(sf::Color(135, 206, 235));
         ground.draw(window);
         player.draw(window);
