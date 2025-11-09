@@ -4,8 +4,8 @@
 #include "Ground/ground.cpp"
 
 #define ASSET_PATH "../../assets/"
-#define PLAYER_IDLE_TEXTURE ASSET_PATH "images/character/knight/Idle.png"
-#define PLAYER_RUN_TEXTURE ASSET_PATH "images/character/knight/Run.png"
+#define PLAYER_IDLE_TEXTURE ASSET_PATH "images/character/player/knight/Idle.png"
+#define PLAYER_RUN_TEXTURE ASSET_PATH "images/character/player/knight/Run.png"
 #define GROUND_TILESET_TEXTURE ASSET_PATH "images/tilesets/tx_tileset_ground.png"
 
 int main()
@@ -18,16 +18,16 @@ int main()
 
     // Buat beberapa platform
     // Platform bawah (ground utama)
-    ground.createPlatform(0, 500, 25, 0, 0); // x, y, panjang, tileX, tileY
+    ground.createPlatform(0, 500, 25, 1, 0); // x, y, panjang, tileX, tileY
 
     // Platform tengah
-    ground.createPlatform(200, 400, 8, 0, 0);
+    ground.createPlatform(200, 400, 8, 1, 0);
 
     // Platform kiri atas
-    ground.createPlatform(50, 300, 5, 0, 0);
+    ground.createPlatform(50, 300, 5, 1, 0);
 
     // Platform kanan atas
-    ground.createPlatform(500, 250, 6, 0, 0);
+    ground.createPlatform(500, 250, 6, 1, 0);
 
     // Buat player
     Player player(PLAYER_IDLE_TEXTURE, PLAYER_RUN_TEXTURE, 100.f, 100.f);
