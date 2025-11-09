@@ -105,6 +105,20 @@ int main()
         // Reset view ke default untuk UI/HUD (jika ada)
         // window.setView(window.getDefaultView());
 
+        // Gambar hitbox collision player untuk debugging
+        sf::RectangleShape debugHitbox;
+        debugHitbox.setFillColor(sf::Color::Transparent);
+        debugHitbox.setOutlineColor(sf::Color::Green);
+        debugHitbox.setOutlineThickness(1.f);
+
+        sf::FloatRect collisionRect = player.getCollisionHitbox();
+
+        debugHitbox.setPosition(collisionRect.position);
+        debugHitbox.setSize(collisionRect.size);
+
+        window.draw(debugHitbox);
+        // end gambar hitbox
+
         window.display();
     }
 
