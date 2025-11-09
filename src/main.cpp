@@ -8,15 +8,15 @@ int main()
     window.setFramerateLimit(30);
 
     // Load a sprite to display
-    const sf::Texture texture("cute_image.jpg");
+    const sf::Texture texture("../../assets/images/background/background_layer_1.png");
     sf::Sprite sprite(texture);
 
     // Create a graphical text to display
-    const sf::Font font("arial.ttf");
+    const sf::Font font("../../assets/fonts/Lexend/static/Lexend-Regular.ttf");
     sf::Text text(font, "Hello SFML", 50);
 
     // Load a music to play
-    sf::Music music("nice_music.ogg");
+    sf::Music music("../../assets/audio/music/fantasy.ogg");
 
     // Play the music
     music.play();
