@@ -58,6 +58,22 @@ Player::Player(const std::string &idleTexturePath,
     sprite.setTextureRect(currentFrame);
     sprite.setOrigin({currentFrameWidth / 2.f, currentFrameHeight / 2.f});
     sprite.setPosition(position);
+
+    // Definisikan hitbox kustom kita.
+    float collisionWidth = 32.f;
+    float collisionHeight = 58.f;
+
+    // Ini adalah 'local' bounds, relatif terhadap origin (tengah sprite)
+    m_collisionBox = {
+        {-(collisionWidth / 2.f), -(collisionHeight / 2.f)}, // Posisi {left, top}
+        {collisionWidth, collisionHeight}                    // Ukuran {width, height}
+    };
+
+    // Jika ingin hitbox-nya di BAWAH (untuk platformer):
+    // m_collisionBox = {
+    //    {-(collisionWidth / 2.f), (currentFrameHeight / 2.f) - collisionHeight},
+    //    {collisionWidth, collisionHeight}
+    // };
 }
 
 void Player::handleInput()
@@ -190,29 +206,28 @@ void Player::applyPhysics(float deltaTime, const std::vector<sf::FloatRect> &gro
     // Simpan posisi lama
     sf::Vector2f oldPosition = position;
 
-    // Update posisi horizontal
+    // === GERAK HORIZONTAL ===
     position.x += velocity.x * deltaTime;
     sprite.setPosition(position);
 
     // Check horizontal collision
-    sf::FloatRect playerBounds = getGlobalBounds();
+    sf::FloatRect playerBounds = getCollisionHitbox();
     for (const auto &groundBox : groundBoxes)
     {
+        // Kode 'if' Anda sudah benar!
         if (playerBounds.findIntersection(groundBox))
         {
-            // Kembalikan posisi x jika collision
             position.x = oldPosition.x;
             sprite.setPosition(position);
             break;
         }
     }
 
-    // Update posisi vertical
+    // === GERAK VERTIKAL ===
     position.y += velocity.y * deltaTime;
     sprite.setPosition(position);
 
-    // Check vertical collision
-    playerBounds = getGlobalBounds();
+    playerBounds = getCollisionHitbox();
     isOnGround = false;
 
     for (const auto &groundBox : groundBoxes)
@@ -222,12 +237,19 @@ void Player::applyPhysics(float deltaTime, const std::vector<sf::FloatRect> &gro
             // Landing on ground (dari atas)
             if (velocity.y > 0)
             {
-                float playerBottom = position.y + (playerBounds.size.y / 2.f);
+                // Gunakan .position.y dan .size.y
+                float playerBottom = playerBounds.position.y + playerBounds.size.y;
                 float groundTop = groundBox.position.y;
 
-                if (playerBottom > groundTop && oldPosition.y + (playerBounds.size.y / 2.f) <= groundTop + 5.f)
+                // Cek posisi lama (penting!)
+                float oldPlayerBottom = oldPosition.y + m_collisionBox.position.y + m_collisionBox.size.y;
+
+                // Cek jika frame sebelumnya DI ATAS ground
+                if (playerBottom > groundTop && oldPlayerBottom <= groundTop + 1.f)
                 {
-                    position.y = groundTop - (playerBounds.size.y / 2.f);
+                    // Setel posisi player TEPAT di atas ground
+                    position.y = groundTop - m_collisionBox.position.y - m_collisionBox.size.y;
+
                     velocity.y = 0.f;
                     isOnGround = true;
                     isJumping = false;
@@ -236,16 +258,17 @@ void Player::applyPhysics(float deltaTime, const std::vector<sf::FloatRect> &gro
             // Hitting ceiling (dari bawah)
             else if (velocity.y < 0)
             {
-                float playerTop = position.y - (playerBounds.size.y / 2.f);
+                float playerTop = playerBounds.position.y;
                 float groundBottom = groundBox.position.y + groundBox.size.y;
+                float oldPlayerTop = oldPosition.y + m_collisionBox.position.y;
 
-                if (playerTop < groundBottom)
+                if (playerTop < groundBottom && oldPlayerTop >= groundBottom - 1.f)
                 {
-                    position.y = groundBottom + (playerBounds.size.y / 2.f);
+                    // Setel posisi player TEPAT di bawah ceiling
+                    position.y = groundBottom - m_collisionBox.position.y;
                     velocity.y = 0.f;
                 }
             }
-
             sprite.setPosition(position);
         }
     }
@@ -272,9 +295,16 @@ sf::Vector2f Player::getPosition() const
     return position;
 }
 
-sf::FloatRect Player::getGlobalBounds() const
+sf::FloatRect Player::getCollisionHitbox() const
 {
-    return sprite.getGlobalBounds();
+    // Ambil kotak lokal
+    sf::FloatRect globalBox = m_collisionBox;
+
+    // Geser posisinya ke posisi global player (yang merupakan origin)
+    globalBox.position.x += position.x;
+    globalBox.position.y += position.y;
+
+    return globalBox;
 }
 
 void Player::setIdleAnimation(int columns, int rows, int frameCount)

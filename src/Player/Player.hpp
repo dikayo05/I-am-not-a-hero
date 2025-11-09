@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <memory>
+#include <optional>
 
 enum class AnimationState
 {
@@ -20,6 +21,7 @@ private:
     sf::Sprite sprite;
     sf::Vector2f position;
     sf::Vector2f velocity;
+    sf::FloatRect m_collisionBox; // Hitbox kustom
     float speed;
     float jumpForce;
     float gravity;
@@ -63,7 +65,7 @@ public:
     void draw(sf::RenderWindow &window);
     bool isFacingRight();
     sf::Vector2f getPosition() const;
-    sf::FloatRect getGlobalBounds() const;
+    sf::FloatRect getCollisionHitbox() const;
     void setIdleAnimation(int columns, int rows, int frameCount);
     void setWalkAnimation(int columns, int rows, int frameCount);
     void setJumpAnimation(int columns, int rows, int frameCount);
