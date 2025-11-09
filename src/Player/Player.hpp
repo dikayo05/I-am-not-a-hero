@@ -51,8 +51,8 @@ private:
 public:
     Player(const std::string &idleTexturePath,
            const std::string &walkTexturePath,
-           float x,
-           float y);
+           float positionX,
+           float positionY);
     void handleInput();
     void updateAnimation(float deltaTime);
     void applyPhysics(float deltaTime, const std::vector<sf::FloatRect> &groundBoxes);

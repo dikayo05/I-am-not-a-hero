@@ -2,13 +2,13 @@
 
 Player::Player(const std::string &idleTexturePath,
                const std::string &walkTexturePath,
-               float x = 100.f,
-               float y = 100.f)
+               float positionX = 100.f,
+               float positionY = 100.f)
     : sprite(idleTexture),
       speed(100.f),
       jumpForce(-400.f),
       gravity(900.f),
-      position(x, y),
+      position(positionX, positionY),
       velocity(0.f, 0.f),
       isOnGround(false),
       isJumping(false),
