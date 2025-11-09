@@ -21,7 +21,7 @@ private:
     sf::Sprite sprite;
     sf::Vector2f position;
     sf::Vector2f velocity;
-    sf::FloatRect m_collisionBox; // Hitbox kustom
+    sf::FloatRect m_collisionBox;
     float speed;
     float jumpForce;
     float gravity;
