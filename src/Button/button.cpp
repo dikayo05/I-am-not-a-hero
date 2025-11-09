@@ -30,7 +30,7 @@ void Button::setFont(sf::Font &buttonFont)
 
     // ===== PERBAIKAN: Buat (em-place) objek sf::Text SEKARANG =====
     // Kita membuat 'text' di sini, saat kita akhirnya punya FONT.
-    text.emplace("", *font, 24);         // 'emplace' membuat objek di dalam optional
+    text.emplace(*font, "", 24);         // 'emplace' membuat objek di dalam optional
     text->setFillColor(textNormalColor); // Gunakan -> untuk akses
 }
 
