@@ -25,7 +25,7 @@ private:
     float gravity;
     bool isOnGround;
     bool isJumping;
-    bool facingRight;
+    bool m_isFacingRight;
 
     // Sistem animasi
     AnimationState currentState;
@@ -61,6 +61,7 @@ public:
     void applyPhysics(float deltaTime, const std::vector<sf::FloatRect> &groundBoxes);
     void update(float deltaTime, const std::vector<sf::FloatRect> &groundBoxes);
     void draw(sf::RenderWindow &window);
+    bool isFacingRight();
     sf::Vector2f getPosition() const;
     sf::FloatRect getGlobalBounds() const;
     void setIdleAnimation(int columns, int rows, int frameCount);

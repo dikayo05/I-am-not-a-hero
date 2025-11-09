@@ -13,7 +13,7 @@ Player::Player(const std::string &idleTexturePath,
       velocity(0.f, 0.f),
       isOnGround(false),
       isJumping(false),
-      facingRight(true),
+      m_isFacingRight(true),
       currentState(AnimationState::Idle),
       previousState(AnimationState::Idle),
       currentFrameIndex(0),
@@ -69,17 +69,17 @@ void Player::handleInput()
         sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
     {
         velocity.x = -speed;
-        facingRight = false;
+        m_isFacingRight = false;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) ||
         sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
     {
         velocity.x = speed;
-        facingRight = true;
+        m_isFacingRight = true;
     }
 
     // Update scale untuk flip sprite
-    if (facingRight)
+    if (m_isFacingRight)
     {
         sprite.setScale({1.f, 1.f}); // Normal
     }
@@ -260,6 +260,11 @@ void Player::update(float deltaTime, const std::vector<sf::FloatRect> &groundBox
 void Player::draw(sf::RenderWindow &window)
 {
     window.draw(sprite);
+}
+
+bool Player::isFacingRight()
+{
+    return m_isFacingRight;
 }
 
 sf::Vector2f Player::getPosition() const
