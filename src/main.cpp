@@ -28,9 +28,6 @@ int main()
 
     // PLAYER
     Player player(PLAYER_IDLE_TEXTURE, PLAYER_RUN_TEXTURE, PLAYER_JUMP_TEXTURE, 100.f, 100.f);
-    // Opsional: Sesuaikan physics
-    // player.setJumpForce(500.f);
-    // player.setGravity(1200.f);
 
     // CAMERA
     sf::View camera(sf::FloatRect({0.f, 0.f}, {800.f, 600.f}));
