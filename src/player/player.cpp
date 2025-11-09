@@ -75,20 +75,19 @@ Player::Player(const std::string &idleTexturePath,
     sprite.setPosition(position);
 
     // Definisikan hitbox kustom kita.
-    float collisionWidth = 32.f;
-    float collisionHeight = 58.f;
+    float collisionWidth = 20.f;
+    float collisionHeight = 45.f;
 
     // Ini adalah 'local' bounds, relatif terhadap origin (tengah sprite)
-    m_collisionBox = {
-        {-(collisionWidth / 2.f), -(collisionHeight / 2.f)}, // Posisi {left, top}
-        {collisionWidth, collisionHeight}                    // Ukuran {width, height}
-    };
+    // m_collisionBox = {
+    //     {-(collisionWidth / 2.f), -(collisionHeight / 2.f)}, // Posisi {left, top}
+    //     {collisionWidth, collisionHeight}                    // Ukuran {width, height}
+    // };
 
     // Jika ingin hitbox-nya di BAWAH (untuk platformer):
-    // m_collisionBox = {
-    //    {-(collisionWidth / 2.f), (currentFrameHeight / 2.f) - collisionHeight},
-    //    {collisionWidth, collisionHeight}
-    // };
+    m_collisionBox = {
+        {-(collisionWidth / 2.f), (currentFrameHeight / 2.f) - collisionHeight},
+        {collisionWidth, collisionHeight}};
 }
 
 void Player::handleInput()
@@ -210,7 +209,6 @@ void Player::updateAnimation(float deltaTime)
     animationTimer += deltaTime;
     AnimationConfig *currentAnim = nullptr;
     float currentAnimSpeed = 0.f;
-    bool loopAnimation = true;
 
     if (currentState == AnimationState::Idle)
     {
@@ -231,7 +229,6 @@ void Player::updateAnimation(float deltaTime)
     {
         currentAnim = &attackAnim;
         currentAnimSpeed = attackAnimSpeed;
-        loopAnimation = false; // Attack tidak loop
     }
 
     if (currentAnim && animationTimer >= currentAnimSpeed)
