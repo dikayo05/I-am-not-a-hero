@@ -1,47 +1,81 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
+#include "Player/player.cpp"
+#include "Ground/ground.cpp"
+
+#define ASSET_PATH "../../assets/"
+#define PLAYER_IDLE_TEXTURE ASSET_PATH "images/character/knight/Idle.png"
+#define PLAYER_RUN_TEXTURE ASSET_PATH "images/character/knight/Run.png"
+#define GROUND_TILESET_TEXTURE ASSET_PATH "images/tilesets/tx_tileset_ground.png"
 
 int main()
 {
-    // Create the main window
     sf::RenderWindow window(sf::VideoMode({800, 600}), "I am not a hero");
-    window.setFramerateLimit(30);
+    window.setFramerateLimit(60);
 
-    // Load a sprite to display
-    const sf::Texture texture("../../assets/images/background/background_layer_1.png");
-    sf::Sprite sprite(texture);
+    // Buat ground dengan tileset
+    Ground ground(GROUND_TILESET_TEXTURE, 32, 32);
 
-    // Create a graphical text to display
-    const sf::Font font("../../assets/fonts/Lexend/static/Lexend-Regular.ttf");
-    sf::Text text(font, "Hello SFML", 50);
+    // Buat beberapa platform
+    // Platform bawah (ground utama)
+    ground.createPlatform(0, 500, 25, 0, 0); // x, y, panjang, tileX, tileY
 
-    // Load a music to play
-    sf::Music music("../../assets/audio/music/fantasy.ogg");
+    // Platform tengah
+    ground.createPlatform(200, 400, 8, 0, 0);
 
-    // Play the music
-    music.play();
+    // Platform kiri atas
+    ground.createPlatform(50, 300, 5, 0, 0);
 
-    // Start the game loop
+    // Platform kanan atas
+    ground.createPlatform(500, 250, 6, 0, 0);
+
+    // Buat player
+    Player player(PLAYER_IDLE_TEXTURE, PLAYER_RUN_TEXTURE, 100.f, 100.f);
+
+    // Opsional: Sesuaikan physics
+    // player.setJumpForce(500.f);
+    // player.setGravity(1200.f);
+
+    sf::Clock clock;
+
+    // Game loop
     while (window.isOpen())
     {
-        // Process events
+        float deltaTime = clock.restart().asSeconds();
+
+        // Handle events
         while (const std::optional event = window.pollEvent())
         {
-            // Close window: exit
             if (event->is<sf::Event::Closed>())
+            {
                 window.close();
+            }
+
+            if (const auto *keyPressed = event->getIf<sf::Event::KeyPressed>())
+            {
+                if (keyPressed->code == sf::Keyboard::Key::Escape)
+                {
+                    window.close();
+                }
+
+                // Reset player position (R key)
+                if (keyPressed->code == sf::Keyboard::Key::R)
+                {
+                    player = Player(PLAYER_IDLE_TEXTURE, PLAYER_RUN_TEXTURE, 100.f, 100.f);
+                }
+            }
         }
 
-        // Clear screen
-        window.clear();
+        // Update
+        player.handleInput();
+        player.update(deltaTime, ground.getCollisionBoxes());
 
-        // Draw the sprite
-        window.draw(sprite);
-
-        // Draw the string
-        window.draw(text);
-
-        // Update the window
+        // Render
+        window.clear(sf::Color(135, 206, 235)); // Sky blue
+        ground.draw(window);
+        player.draw(window);
         window.display();
     }
+
+    return 0;
 }
