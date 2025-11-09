@@ -2,8 +2,6 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include <memory>
-#include <vector>
 
 class Ground
 {
