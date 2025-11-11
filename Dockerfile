@@ -1,6 +1,11 @@
-FROM ubuntu:24.04
+# ============================
+# Stage 1: Build Environment
+# ============================
+FROM ubuntu:24.04 AS builder
 
-# Install dependencies
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install build dependencies
 RUN apt update && apt install -y \
     git \
     g++ \
@@ -13,19 +18,45 @@ RUN apt update && apt install -y \
     libflac-dev \
     libvorbis-dev \
     libgl1-mesa-dev \
-    libegl1-mesa-dev 
-
-# clear cache to make image smaller
-RUN rm -rf /var/lib/apt/lists/*
+    libegl1-mesa-dev \
+    libxrandr2 \
+    libxcursor1 \
+    libxi6 \
+    libfreetype6 \
+    && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
 
-# Copy project files
+# Copy source code
 COPY . .
 
-# Clean previous builds
-RUN rm -rf build
-
-# Build project with cmake
+# Build project
 RUN cmake -B build && cmake --build build
+
+# ============================
+# Stage 2: Runtime Environment
+# ============================
+FROM ubuntu:24.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install runtime dependencies
+RUN apt update && apt install -y \
+    libxrandr2 \
+    libxcursor1 \
+    libxi6 \
+    libfreetype6 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /app
+
+# Copy built binary and resources from builder stage
+COPY --from=builder /app/build/bin/main .
+COPY --from=builder /app/assets ./assets
+
+# Run the game
+CMD ["./main"]
+
+RUN ldd ./main
