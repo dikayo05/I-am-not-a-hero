@@ -15,7 +15,8 @@ private:
 public:
     Ground(const std::string &tilesetPath, int tileW, int tileH);
     void addTile(float x, float y, int tileIndexX, int tileIndexY);
-    void createPlatform(float startX, float y, int length, int tileIndexX, int tileIndexY);
+    void createHorizontalPlatform(float startX, float y, int length, int tileIndexX, int tileIndexY);
+    void createVerticalPlatform(float x, float startY, int length, int tileIndexX, int tileIndexY);
     void draw(sf::RenderWindow &window);
     const std::vector<sf::FloatRect> &getCollisionBoxes() const;
     void clear();

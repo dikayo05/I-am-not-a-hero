@@ -26,12 +26,21 @@ void Ground::addTile(float x, float y, int tileIndexX = 0, int tileIndexY = 0)
     m_collisionBoxes.push_back(sf::FloatRect({x, y}, {static_cast<float>(m_tileWidth), static_cast<float>(m_tileHeight)}));
 }
 
-// make horizontal platform
-void Ground::createPlatform(float startX, float y, int length, int tileIndexX = 0, int tileIndexY = 0)
+// make horizontal platform (left to right)
+void Ground::createHorizontalPlatform(float startX, float y, int length, int tileIndexX = 0, int tileIndexY = 0)
 {
     for (int i = 0; i < length; i++)
     {
         addTile(startX + (i * m_tileWidth), y, tileIndexX, tileIndexY);
+    }
+}
+
+// make vertical platform (or wall) (top to bottom)
+void Ground::createVerticalPlatform(float x, float startY, int length, int tileIndexX = 0, int tileIndexY = 0)
+{
+    for (int i = 0; i < length; i++)
+    {
+        addTile(x, startY + (i * m_tileHeight), tileIndexX, tileIndexY);
     }
 }
 
