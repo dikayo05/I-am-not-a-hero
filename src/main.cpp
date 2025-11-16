@@ -1,25 +1,9 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
+#include "Constants.hpp"
 #include "components/Player.hpp"
 #include "components/Ground.hpp"
 #include "scenes/MenuScene.hpp"
-
-#define WINDOW_WIDTH 1920
-#define WINDOW_HEIGHT 1080
-
-#define ASSET_PATH "../../assets/"
-
-// FONT
-#define FONT_PATH ASSET_PATH "fonts/Lexend/static/Lexend-Regular.ttf"
-
-// PLAYER TEXTURES
-#define PLAYER_IDLE_TEXTURE ASSET_PATH "images/character/player/knight/Idle.png"
-#define PLAYER_RUN_TEXTURE ASSET_PATH "images/character/player/knight/Run.png"
-#define PLAYER_JUMP_TEXTURE ASSET_PATH "images/character/player/knight/Jump.png"
-#define PLAYER_ATTACK_TEXTURE ASSET_PATH "images/character/player/knight/Attacks.png"
-
-// GROUND TILESET TEXTURE
-#define GROUND_TILESET_TEXTURE ASSET_PATH "images/tilesets/tx_tileset_ground.png"
 
 enum class GameState
 {
@@ -29,14 +13,14 @@ enum class GameState
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode({WINDOW_WIDTH, WINDOW_HEIGHT}), "I am not a hero");
+    sf::RenderWindow window(sf::VideoMode({Paths::WINDOW_WIDTH, Paths::WINDOW_HEIGHT}), "I am not a hero");
     window.setFramerateLimit(60);
 
     GameState gameState = GameState::Menu;
 
     // Menu
-    Menu menu(static_cast<float>(WINDOW_WIDTH), static_cast<float>(WINDOW_HEIGHT));
-    if (!menu.loadFont(FONT_PATH))
+    Menu menu(static_cast<float>(Paths::WINDOW_WIDTH), static_cast<float>(Paths::WINDOW_HEIGHT));
+    if (!menu.loadFont(Paths::FONT_PATH))
     {
         std::cerr << "Failed to load font for menu!" << std::endl;
     }
@@ -57,7 +41,7 @@ int main()
                            { window.close(); });
 
     // PLATFORMS
-    Ground ground(GROUND_TILESET_TEXTURE, 32, 32);
+    Ground ground(Paths::GROUND_TILESET_TEXTURE, 32, 32);
     // x, y, long, tileX, tileY
     ground.createPlatform(0, 500, 25, 1, 0);  // Platform down (main ground)
     ground.createPlatform(200, 400, 8, 1, 0); // Platform middle
@@ -65,7 +49,7 @@ int main()
     ground.createPlatform(500, 250, 6, 1, 0); // Platform right top
 
     // PLAYER
-    Player player(PLAYER_IDLE_TEXTURE, PLAYER_RUN_TEXTURE, PLAYER_JUMP_TEXTURE, PLAYER_ATTACK_TEXTURE, 100.f, 100.f);
+    Player player(Paths::PLAYER_IDLE_TEXTURE, Paths::PLAYER_RUN_TEXTURE, Paths::PLAYER_JUMP_TEXTURE, Paths::PLAYER_ATTACK_TEXTURE, 100.f, 100.f);
 
     // CAMERA
     sf::View camera(sf::FloatRect({0.f, 0.f}, {800.f, 600.f}));
