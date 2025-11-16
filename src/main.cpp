@@ -41,7 +41,7 @@ int main()
         std::cerr << "Failed to load font for menu!" << std::endl;
     }
 
-    // Add buttons dengan callback
+    // Add buttons with callback
     Button *playButton = menu.addButton("PLAY", 300.f);
     playButton->setOnClick([&gameState]()
                            {
@@ -58,18 +58,18 @@ int main()
 
     // PLATFORMS
     Ground ground(GROUND_TILESET_TEXTURE, 32, 32);
-    // x, y, panjang, tileX, tileY
-    ground.createPlatform(0, 500, 25, 1, 0);  // Platform bawah (ground utama)
-    ground.createPlatform(200, 400, 8, 1, 0); // Platform tengah
-    ground.createPlatform(50, 300, 5, 1, 0);  // Platform kiri atas
-    ground.createPlatform(500, 250, 6, 1, 0); // Platform kanan atas
+    // x, y, long, tileX, tileY
+    ground.createPlatform(0, 500, 25, 1, 0);  // Platform down (main ground)
+    ground.createPlatform(200, 400, 8, 1, 0); // Platform middle
+    ground.createPlatform(50, 300, 5, 1, 0);  // Platform left top
+    ground.createPlatform(500, 250, 6, 1, 0); // Platform right top
 
     // PLAYER
     Player player(PLAYER_IDLE_TEXTURE, PLAYER_RUN_TEXTURE, PLAYER_JUMP_TEXTURE, PLAYER_ATTACK_TEXTURE, 100.f, 100.f);
 
     // CAMERA
     sf::View camera(sf::FloatRect({0.f, 0.f}, {800.f, 600.f}));
-    float cameraSmoothing = 0.1f; // Semakin kecil = semakin smooth (0.05f - 1.0f)
+    float cameraSmoothing = 0.1f; // the smaller = the finer (0.05f - 1.0f)
 
     sf::Clock clock;
 
@@ -122,8 +122,8 @@ int main()
             // CAMERA FOLLOW PLAYER
             sf::Vector2f targetCameraPos = player.getPosition();
 
-            // Camera look-ahead berdasarkan arah player
-            float lookAheadDistance = 25.f; // Jarak look-ahead
+            // Camera look-ahead based on player facing direction
+            float lookAheadDistance = 25.f; // look-ahead distance
             if (!player.isFacingRight())
             {
                 targetCameraPos.x -= lookAheadDistance;
@@ -137,22 +137,22 @@ int main()
             sf::Vector2f newCameraPos = currentCameraPos + (targetCameraPos - currentCameraPos) * cameraSmoothing;
             camera.setCenter(newCameraPos);
 
-            // Batasi camera agar tidak keluar dari batas map (opsional)
+            // Limit the camera so it doesn't go beyond the map boundaries (optional)
             float halfWidth = camera.getSize().x / 2.f;
             float halfHeight = camera.getSize().y / 2.f;
 
-            // Set batas map Anda (sesuaikan dengan ukuran level)
+            // Set your map boundaries (adjust according to the level size)
             float minX = halfWidth;
-            float maxX = 2000.f - halfWidth; // Misal lebar map 2000
+            float maxX = 2000.f - halfWidth; // For example, the map width is 2000
             float minY = halfHeight;
-            float maxY = 1000.f - halfHeight; // Misal tinggi map 1000
+            float maxY = 1000.f - halfHeight; // For example, map height 1000
 
             sf::Vector2f boundedPos = camera.getCenter();
             boundedPos.x = std::max(minX, std::min(boundedPos.x, maxX));
             boundedPos.y = std::max(minY, std::min(boundedPos.y, maxY));
 
             camera.setCenter(boundedPos);
-            // end batasi
+            // end limit the camera
 
             window.setView(camera);
         }
@@ -168,12 +168,12 @@ int main()
         {
             ground.draw(window);
             player.draw(window);
-            player.drawAttackHitbox(window); // Gambar hitbox serangan untuk debugging
+            player.drawAttackHitbox(window); // Attack hitbox image for debugging
 
-            // Reset view ke default untuk UI/HUD (jika ada)
+            // Reset view to default for UI/HUD (if any)
             // window.setView(window.getDefaultView());
 
-            // Gambar hitbox collision player untuk debugging
+            // Player collision hitbox image for debugging
             sf::RectangleShape debugHitbox;
             debugHitbox.setFillColor(sf::Color::Transparent);
             debugHitbox.setOutlineColor(sf::Color::Green);
@@ -185,7 +185,7 @@ int main()
             debugHitbox.setSize(collisionRect.size);
 
             window.draw(debugHitbox);
-            // end Gambar hitbox
+            // end player collision hitbox
         }
 
         window.display();

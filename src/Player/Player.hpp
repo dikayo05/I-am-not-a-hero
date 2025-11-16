@@ -16,52 +16,52 @@ enum class AnimationState
 class Player
 {
 private:
-    sf::Texture idleTexture;
-    sf::Texture walkTexture;
-    sf::Texture jumpTexture;
-    sf::Texture attackTexture;
-    sf::Sprite sprite;
-    sf::Vector2f position;
-    sf::Vector2f velocity;
+    sf::Texture m_idleTexture;
+    sf::Texture m_walkTexture;
+    sf::Texture m_jumpTexture;
+    sf::Texture m_attackTexture;
+    sf::Sprite m_sprite;
+    sf::Vector2f m_position;
+    sf::Vector2f m_velocity;
     sf::FloatRect m_collisionBox;
 
-    float speed;
-    float jumpForce;
-    float gravity;
-    bool isOnGround;
-    bool isJumping;
+    float m_speed;
+    float m_jumpForce;
+    float m_gravity;
+    bool m_isOnGround;
+    bool m_isJumping;
     bool m_isFacingRight;
 
-    // Sistem animasi
-    AnimationState currentState;
-    AnimationState previousState;
-    sf::IntRect currentFrame;
-    int currentFrameIndex;
-    float animationTimer;
-    float idleAnimSpeed;
-    float walkAnimSpeed;
-    float attackAnimSpeed;
-    bool isAttacking;
-    float attackCooldown;
-    float attackCooldownTimer;
+    // animation
+    AnimationState m_currentState;
+    AnimationState m_previousState;
+    sf::IntRect m_currentFrame;
+    int m_currentFrameIndex;
+    float m_animationTimer;
+    float m_idleAnimSpeed;
+    float m_walkAnimSpeed;
+    float m_attackAnimSpeed;
+    bool m_isAttacking;
+    float m_attackCooldown;
+    float m_attackCooldownTimer;
 
-    sf::FloatRect attackHitbox;
-    bool attackHitboxActive;
+    sf::FloatRect m_attackHitbox;
+    bool m_attackHitboxActive;
 
     struct AnimationConfig
     {
-        int frameCount;
-        int columns;
-        int rows;
+        int m_frameCount;
+        int m_columns;
+        int m_rows;
     };
 
-    AnimationConfig idleAnim;
-    AnimationConfig walkAnim;
-    AnimationConfig jumpAnim;
-    AnimationConfig attackAnim;
+    AnimationConfig m_idleAnim;
+    AnimationConfig m_walkAnim;
+    AnimationConfig m_jumpAnim;
+    AnimationConfig m_attackAnim;
 
-    int currentFrameWidth;
-    int currentFrameHeight;
+    int m_currentFrameWidth;
+    int m_currentFrameHeight;
 
 public:
     Player(const std::string &idleTexturePath,

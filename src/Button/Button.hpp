@@ -8,20 +8,20 @@
 class Button
 {
 private:
-    sf::RectangleShape shape;
-    sf::Font *font;
-    std::optional<sf::Text> text;
+    sf::RectangleShape m_shape;
+    sf::Font *m_font;
+    std::optional<sf::Text> m_text;
 
-    sf::Color normalColor;
-    sf::Color hoverColor;
-    sf::Color pressedColor;
-    sf::Color textNormalColor;
-    sf::Color textHoverColor;
+    sf::Color m_normalColor;
+    sf::Color m_hoverColor;
+    sf::Color m_pressedColor;
+    sf::Color m_textNormalColor;
+    sf::Color m_textHoverColor;
 
-    bool isHovered;
-    bool isPressed;
+    bool m_isHovered;
+    bool m_isPressed;
 
-    std::function<void()> onClick;
+    std::function<void()> m_onClick;
 
 public:
     // Constructor

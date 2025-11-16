@@ -1,43 +1,43 @@
 #include "Ground.hpp"
 
 Ground::Ground(const std::string &tilesetPath, int tileW = 32, int tileH = 32)
-    : tileWidth(tileW), tileHeight(tileH)
+    : m_tileWidth(tileW), m_tileHeight(tileH)
 {
-    if (!tileset.loadFromFile(tilesetPath))
+    if (!m_tileset.loadFromFile(tilesetPath))
     {
         std::cerr << "Error loading tileset!" << std::endl;
     }
 }
 
-// Tambah tile di posisi tertentu
+// add single tile at (x, y) with tile index in tileset (tileIndexX, tileIndexY)
 void Ground::addTile(float x, float y, int tileIndexX = 0, int tileIndexY = 0)
 {
-    sf::Sprite tile(tileset);
+    sf::Sprite tile(m_tileset);
 
-    // Set texture rect untuk memilih tile dari tileset
+    // Set texture rect for the tile
     tile.setTextureRect(sf::IntRect(
-        {tileIndexX * tileWidth, tileIndexY * tileHeight},
-        {tileWidth, tileHeight}));
+        {tileIndexX * m_tileWidth, tileIndexY * m_tileHeight},
+        {m_tileWidth, m_tileHeight}));
 
     tile.setPosition({x, y});
-    tiles.push_back(tile);
+    m_tiles.push_back(tile);
 
-    // Tambah collision box
-    collisionBoxes.push_back(sf::FloatRect({x, y}, {static_cast<float>(tileWidth), static_cast<float>(tileHeight)}));
+    // add collision box
+    m_collisionBoxes.push_back(sf::FloatRect({x, y}, {static_cast<float>(m_tileWidth), static_cast<float>(m_tileHeight)}));
 }
 
-// Buat platform horizontal
+// make horizontal platform
 void Ground::createPlatform(float startX, float y, int length, int tileIndexX = 0, int tileIndexY = 0)
 {
     for (int i = 0; i < length; i++)
     {
-        addTile(startX + (i * tileWidth), y, tileIndexX, tileIndexY);
+        addTile(startX + (i * m_tileWidth), y, tileIndexX, tileIndexY);
     }
 }
 
 void Ground::draw(sf::RenderWindow &window)
 {
-    for (const auto &tile : tiles)
+    for (const auto &tile : m_tiles)
     {
         window.draw(tile);
     }
@@ -45,11 +45,11 @@ void Ground::draw(sf::RenderWindow &window)
 
 const std::vector<sf::FloatRect> &Ground::getCollisionBoxes() const
 {
-    return collisionBoxes;
+    return m_collisionBoxes;
 }
 
 void Ground::clear()
 {
-    tiles.clear();
-    collisionBoxes.clear();
+    m_tiles.clear();
+    m_collisionBoxes.clear();
 }
