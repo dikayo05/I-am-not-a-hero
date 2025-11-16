@@ -48,6 +48,12 @@ The template starts out very basic, but might receive additional features over t
    cmake --build build
    ```
 
+   for create installer
+
+   ```
+   cpack --config build/CPackConfig.cmake
+   ```
+
 9. Enjoy!
 
 ### Visual Studio
