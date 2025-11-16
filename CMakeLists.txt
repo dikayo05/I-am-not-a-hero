@@ -12,8 +12,19 @@ FetchContent_Declare(SFML
     SYSTEM)
 FetchContent_MakeAvailable(SFML)
 
-file(GLOB_RECURSE SOURCES "src/*.cpp")
-add_executable(main ${SOURCES})
+add_executable(main
+    src/Game.cpp
+    src/main.cpp
+
+    # Scenes
+    src/scenes/GameScene.cpp
+    src/scenes/MenuScene.cpp
+
+    # Components
+    src/components/Button.cpp
+    src/components/Ground.cpp
+    src/components/Player.cpp
+)
 
 target_include_directories(main PRIVATE ${CMAKE_SOURCE_DIR}/include)
 target_compile_features(main PRIVATE cxx_std_17)
