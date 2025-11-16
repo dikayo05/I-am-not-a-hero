@@ -41,12 +41,19 @@ int main()
                            { window.close(); });
 
     // PLATFORMS
-    Ground ground(Paths::GROUND_TILESET_TEXTURE, 32, 32);
-    // x, y, long, tileX, tileY
-    ground.createPlatform(0, 500, 25, 1, 0);  // Platform down (main ground)
-    ground.createPlatform(200, 400, 8, 1, 0); // Platform middle
-    ground.createPlatform(50, 300, 5, 1, 0);  // Platform left top
-    ground.createPlatform(500, 250, 6, 1, 0); // Platform right top
+    int tileSizeX = 32;
+    int tileSizeY = 32;
+    Ground ground(Paths::GROUND_TILESET_TEXTURE, tileSizeX, tileSizeY);
+    int mapWidth = 1000;
+    int mapHeight = 1000;
+    // startX, y, long, tileX, tileY
+    ground.createHorizontalPlatform(0, mapHeight, 35, 1, 0); // ground bottom
+    ground.createHorizontalPlatform(0, 0, 35, 1, 0);         // wall top
+    ground.createVerticalPlatform(0, 0, 35, 2, 1);           // wall left
+    ground.createVerticalPlatform(mapWidth, 0, 35, 0, 1);    // wall right
+    ground.createHorizontalPlatform(200, 400, 8, 1, 0);      // platform middle
+    ground.createHorizontalPlatform(50, 300, 5, 1, 0);       // platform left top
+    ground.createHorizontalPlatform(500, 250, 6, 1, 0);      // platform right top
 
     // PLAYER
     Player player(Paths::PLAYER_IDLE_TEXTURE, Paths::PLAYER_RUN_TEXTURE, Paths::PLAYER_JUMP_TEXTURE, Paths::PLAYER_ATTACK_TEXTURE, 100.f, 100.f);
@@ -127,9 +134,9 @@ int main()
 
             // Set your map boundaries (adjust according to the level size)
             float minX = halfWidth;
-            float maxX = 2000.f - halfWidth; // For example, the map width is 2000
+            float maxX = mapWidth - halfWidth + tileSizeX; // For example, the map width is 2000
             float minY = halfHeight;
-            float maxY = 1000.f - halfHeight; // For example, map height 1000
+            float maxY = mapHeight - halfHeight + tileSizeY; // For example, map height 1000
 
             sf::Vector2f boundedPos = camera.getCenter();
             boundedPos.x = std::max(minX, std::min(boundedPos.x, maxX));
@@ -153,9 +160,6 @@ int main()
             ground.draw(window);
             player.draw(window);
             player.drawAttackHitbox(window); // Attack hitbox image for debugging
-
-            // Reset view to default for UI/HUD (if any)
-            // window.setView(window.getDefaultView());
 
             // Player collision hitbox image for debugging
             sf::RectangleShape debugHitbox;
