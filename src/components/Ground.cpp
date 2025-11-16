@@ -1,4 +1,4 @@
-#include "Ground.hpp"
+#include "components/Ground.hpp"
 
 Ground::Ground(const std::string &tilesetPath, int tileW = 32, int tileH = 32)
     : m_tileWidth(tileW), m_tileHeight(tileH)

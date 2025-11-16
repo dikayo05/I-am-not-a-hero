@@ -1,4 +1,4 @@
-#include "Player.hpp"
+#include "components/Player.hpp"
 
 Player::Player(const std::string &idleTexturePath,
                const std::string &walkTexturePath,

@@ -1,8 +1,8 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
-#include "Player/player.cpp"
-#include "Ground/ground.cpp"
-#include "Scenes/main-menu.cpp"
+#include "components/Player.hpp"
+#include "components/Ground.hpp"
+#include "scenes/MenuScene.hpp"
 
 #define WINDOW_WIDTH 1920
 #define WINDOW_HEIGHT 1080

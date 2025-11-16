@@ -1,5 +1,5 @@
-#include "Button.hpp"
 #include <iostream>
+#include "components/Button.hpp"
 
 Button::Button(float x, float y, float width, float height)
     : m_shape({width, height}),

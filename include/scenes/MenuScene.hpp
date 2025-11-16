@@ -5,7 +5,7 @@
 #include <vector>
 #include <memory>
 #include <optional>
-#include "../Button/button.cpp"
+#include "components/Button.hpp"
 
 class Menu
 {

@@ -1,5 +1,5 @@
-#include "MainMenu.hpp"
 #include <iostream>
+#include "scenes/MenuScene.hpp"
 
 Menu::Menu(float windowWidth, float windowHeight)
 {

@@ -28,8 +28,8 @@ public:
     Button(float x, float y, float width, float height);
 
     // Setup
-    void setFont(sf::Font &buttonFont);
-    void setText(const std::string &buttonText);
+    void setFont(sf::Font &font);
+    void setText(const std::string &text);
     void setTextSize(unsigned int size);
     void setPosition(float x, float y);
     void setSize(float width, float height);
@@ -42,8 +42,8 @@ public:
     void setOnClick(std::function<void()> callback);
 
     // Interaction
-    void handleMouseMove(sf::Vector2f mousePos);
-    bool handleMousePress(sf::Vector2f mousePos);
+    void handleMouseMove(sf::Vector2f pos);
+    bool handleMousePress(sf::Vector2f pos);
     void handleMouseRelease();
 
     // Getters
