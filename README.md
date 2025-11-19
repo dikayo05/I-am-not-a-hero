@@ -57,7 +57,8 @@ The template starts out very basic, but might receive additional features over t
    or
 
    ```
-   cd build && cpack -G NSIS
+   cd build
+   cpack -G NSIS
    ```
 
 9. Enjoy!
