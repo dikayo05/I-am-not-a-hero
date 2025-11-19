@@ -56,10 +56,21 @@ set(CPACK_GENERATOR "NSIS")
 set(CPACK_NSIS_INSTALLER_ICON "${CMAKE_SOURCE_DIR}/assets/icon.ico")
 set(CPACK_NSIS_MUI_ICON "${CMAKE_SOURCE_DIR}/assets/icon.ico")
 set(CPACK_NSIS_MUI_UNIICON "${CMAKE_SOURCE_DIR}/assets/icon.ico")
-set(CPACK_NSIS_DISPLAY_NAME "${CPACK_PACKAGE_NAME}")
-set(CPACK_NSIS_MENU_LINKS "bin/main.exe" "IAmNotAHero")
-set(CPACK_CREATE_DESKTOP_LINKS "IAmNotAHero")
 set(CPACK_PACKAGE_CONTACT "yonandaputra05@gmail.com")
 set(CPACK_PACKAGE_DESCRIPTION "IAmNotAHero - A 2D Adventure Game using SFML")
+
+# Shortcut and Search
+set(CPACK_CREATE_DESKTOP_LINKS "IAmNotAHero")
+set(CPACK_NSIS_MENU_LINKS "bin/main.exe" "IAmNotAHero")
+set(CPACK_NSIS_DISPLAY_NAME "${CPACK_PACKAGE_NAME}")
+set(CPACK_NSIS_PACKAGE_NAME "IAmNotAHero")
+
+# Icon and path
+set(CPACK_NSIS_EXECUTABLES_DIRECTORY "bin")
+set(CPACK_NSIS_INSTALLED_ICON_NAME "icon.ico")
+
+# Registry and PATH
+set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
+set(CPACK_NSIS_MODIFY_PATH ON)
 
 # --- End of Installation and Packages Section ---
