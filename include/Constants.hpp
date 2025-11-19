@@ -1,12 +1,13 @@
 #pragma once
 
 #include <string>
+#include <cstdint>
 
 namespace Paths
 {
     // WINDOW DIMENSIONS
-    uint32_t WINDOW_WIDTH = 1920;
-    uint32_t WINDOW_HEIGHT = 1080;
+    uint32_t WINDOW_WIDTH = 900;
+    uint32_t WINDOW_HEIGHT = 600;
 
     // BASE ASSET PATH
     const std::string ASSET_PATH = "assets/";
