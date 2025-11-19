@@ -54,6 +54,12 @@ The template starts out very basic, but might receive additional features over t
    cpack --config build/CPackConfig.cmake
    ```
 
+   or
+
+   ```
+   cd build && cpack -G NSIS
+   ```
+
 9. Enjoy!
 
 ### Visual Studio
