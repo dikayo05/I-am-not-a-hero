@@ -24,9 +24,7 @@ jobs:
         run: cmake --build build --config Release
 
       - name: Run CPack (generate installer)
-        run: |
-          cd build
-          cpack -G NSIS
+        run: cpack --config build/CPackConfig.cmake
 
       - name: Upload installer to Release
         uses: softprops/action-gh-release@v1
