@@ -17,6 +17,9 @@ jobs:
       - name: Setup CMake
         uses: lukka/get-cmake@latest
 
+      - name: Install NSIS
+        run: choco install nsis -y
+
       - name: Configure
         run: cmake -B build -S . -DCMAKE_BUILD_TYPE=Release
 
