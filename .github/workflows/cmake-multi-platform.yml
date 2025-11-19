@@ -1,0 +1,35 @@
+name: Build and Package Game
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest  # NSIS hanya tersedia di Windows runner
+
+    steps:
+    - name: Checkout source
+      uses: actions/checkout@v4
+
+    - name: Setup CMake
+      uses: lukka/get-cmake@latest
+
+    - name: Configure
+      run: cmake -B build -S . -DCMAKE_BUILD_TYPE=Release
+
+    - name: Build
+      run: cmake --build build --config Release
+
+    - name: Run CPack (generate installer)
+      run: |
+        cd build
+        cpack -G NSIS
+
+    - name: Upload Installer Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: IAmNotAHero-Installer
+        path: build/*.exe
