@@ -6,8 +6,8 @@
 namespace Paths
 {
     // WINDOW DIMENSIONS
-    uint32_t WINDOW_WIDTH = 900;
-    uint32_t WINDOW_HEIGHT = 600;
+    extern uint32_t WINDOW_WIDTH;
+    extern uint32_t WINDOW_HEIGHT;
 
     // BASE ASSET PATH
     const std::string ASSET_PATH = "assets/";
