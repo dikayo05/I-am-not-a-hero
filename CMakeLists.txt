@@ -1,7 +1,10 @@
 cmake_minimum_required(VERSION 3.28)
-project(IAmNotAHero LANGUAGES CXX)
+project(IAmNotAHero VERSION 1.0.0 LANGUAGES CXX)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # --- SFML via FetchContent ---
 include(FetchContent)
@@ -40,11 +43,14 @@ install(DIRECTORY assets
     DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
+install(FILES ${CMAKE_SOURCE_DIR}/assets/icon.ico
+    DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+
 # --- CPack Configuration ---
-include(CPack)
 
 # Set Your Own Game Version
-set(GAME_VERSION "1.0.0")
+set(GAME_VERSION "${PROJECT_VERSION}")
 
 # Installer file name that you have full control over
 set(CPACK_PACKAGE_NAME "IAmNotAHero")
@@ -73,4 +79,5 @@ set(CPACK_NSIS_INSTALLED_ICON_NAME "icon.ico")
 set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
 set(CPACK_NSIS_MODIFY_PATH ON)
 
+include(CPack)
 # --- End of Installation and Packages Section ---
