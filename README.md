@@ -1,3 +1,11 @@
+# I AM NOT A HERO
+
+[![Release](https://img.shields.io/github/v/release/dikayo05/I-am-not-a-hero)](https://img.shields.io/github/v/release/dikayo05/I-am-not-a-hero)
+[![Build status](https://img.shields.io/github/actions/workflow/status/dikayo05/I-am-not-a-hero/main.yml?branch=main)](https://github.com/dikayo05/I-am-not-a-hero/actions/workflows/main.yml?query=branch%3Amain)
+[![codecov](https://codecov.io/gh/dikayo05/I-am-not-a-hero/branch/main/graph/badge.svg)](https://codecov.io/gh/dikayo05/I-am-not-a-hero)
+[![Commit activity](https://img.shields.io/github/commit-activity/m/dikayo05/I-am-not-a-hero)](https://img.shields.io/github/commit-activity/m/dikayo05/I-am-not-a-hero)
+[![License](https://img.shields.io/github/license/dikayo05/I-am-not-a-hero)](https://img.shields.io/github/license/dikayo05/I-am-not-a-hero)
+
 # CMake SFML Project Template
 
 This repository template should allow for a fast and hassle-free kick start of your next SFML project using CMake.
